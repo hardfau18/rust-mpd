@@ -207,8 +207,8 @@ impl<S: Read + Write> Client<S> {
     }
 
     /// lists all songs in the database
-    pub fn listall(&mut self) -> Result<Vec<String>> {
-        self.run_command("listall", ()).and_then(|_| self.read_structs("file"))
+    pub fn listall(&mut self) -> Result<Vec<Song>> {
+        self.run_command("listallinfo", ()).and_then(|_| self.read_structs("file"))
     }
 
     /// Get current playing song
@@ -610,7 +610,7 @@ impl<S: Read + Write> Client<S> {
     /// List all files of a given type under given directory (identified by uri)
     /// with a tag set to given value
     pub fn find_sticker_eq(&mut self, typ: &str, uri: &str, name: &str, value: &str) -> Result<Vec<String>> {
-        self.run_command("sticker find", (typ, uri, name, value)).and_then(|_| self.read_list("file"))
+        self.run_command("sticker find", (typ, uri, name, "=", value)).and_then(|_| self.read_list("file"))
     }
     // }}}
 }

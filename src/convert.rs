@@ -1,7 +1,7 @@
 #![allow(missing_docs)]
 //! These are inner traits to support methods overloading for the `Client`
 
-use crate::error::{Error, ProtoError};
+use crate::error::Error;
 use crate::output::Output;
 use crate::playlist::Playlist;
 use crate::proto::ToArguments;
@@ -315,14 +315,3 @@ impl<T: ToSongPath> ToArguments for T {
     }
 }
 
-impl FromIter for String{
-    fn from_iter<I: Iterator<Item = Result<(String, String), Error>>>(mut iter: I) -> Result<Self, Error> {
-        for res in iter{
-            let line = res?;
-            if line.0 == "file" {
-                return Ok(line.1)
-            }
-        }
-        Err(Error::Proto(ProtoError::NoField("songname")))
-    }
-}
